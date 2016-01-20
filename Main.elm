@@ -13,20 +13,21 @@ main =
 update newStr oldStr =
   newStr
 
+lastFridays : String -> List String
+lastFridays string = 
+  [String.reverse string, string]
 
 view : Address String -> String -> Html
 view address string =
   div []
-    [ input
+    ([ input
         [ placeholder "Text to reverse"
         , value string
         , on "input" targetValue (Signal.message address)
         , myStyle
         ]
         []
-    , div [ myStyle ] [ text (String.reverse string) ]
-    ]
-
+     ] ++ List.map (\date -> div [ myStyle ] [ text date ]) (lastFridays string)   )
 
 myStyle : Attribute
 myStyle =
