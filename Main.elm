@@ -7,7 +7,7 @@ import String exposing (..)
 import Maybe exposing (withDefault)
 
 months : List String
-months= ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+months= ["January ", "February ", "March ", "April ", "May ", "June ", "July ", "August ", "September ", "October ", "November ", "December "]
 
 isLeap : Int -> Bool
 isLeap year = (year % 400) == 0 || ( (year % 4) == 0 && (year % 100) /= 0 )
