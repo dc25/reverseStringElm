@@ -17,22 +17,16 @@ lastFridays year =
      |> map (\day -> (day + 2 + y + y//4 - y//100 + y//400) % 7) 
      |> map2 (-) daysInMonth 
 
-errString : String
-errString = "Only years after 1752 are valid."
-
-months : List String
-months= ["January ", "February ", "March ", "April ", "May ", "June ", "July ", "August ", "September ", "October ", "November ", "December "]
-
 lastFridayStrings : String -> List String
 lastFridayStrings yearString = 
-  case toInt yearString of 
-    Ok year -> if (year < 1753) 
+  let errString = "Only years after 1752 are valid."
+      months= ["January ", "February ", "March ", "April ", "May ", "June ", "July ", "August ", "September ", "October ", "November ", "December "]
+  in case toInt yearString of 
+       Ok year -> if (year < 1753) 
                   then [errString] 
                   else lastFridays year
-                       |> map toString 
-                       |> map2 (++) months 
-                       |> map (\s -> s ++ ", " ++ yearString)
-    Err _ -> [errString]
+                       |> map2 (\m d -> m ++ toString d ++ ", " ++ toString year) months
+       Err _ -> [errString]
 
 main = start { model = "", view = view, update = update }
 
