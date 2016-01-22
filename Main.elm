@@ -6,35 +6,31 @@ import StartApp.Simple exposing (start)
 import String exposing (toInt)
 import Maybe exposing (withDefault)
 
-months : List String
-months= ["January ", "February ", "March ", "April ", "May ", "June ", "July ", "August ", "September ", "October ", "November ", "December "]
-
-lastFridayOfMonth : Int -> List Int
-lastFridayOfMonth year =
+lastFridays : Int -> List Int
+lastFridays year =
   let isLeap = (year % 400) == 0 || ( (year % 4) == 0 && (year % 100) /= 0 )
-
       daysInMonth = [31, if isLeap then 29 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
       y = year-1
-
-  in  daysInMonth
-      |> List.scanl (+) 0 
-      |> List.tail
-      |> Maybe.withDefault []
-      |> List.map ((+) (365*y + y//4 - y//100 + y//400))
-      |> List.map (\day -> (day-5) % 7) 
-      |> List.map2 (-) daysInMonth 
-
+  in daysInMonth
+     |> List.scanl (+) 0 
+     |> List.tail
+     |> Maybe.withDefault []
+     |> List.map ((+) (365*y + y//4 - y//100 + y//400))
+     |> List.map (\day -> (day-5) % 7) 
+     |> List.map2 (-) daysInMonth 
 
 errString : String
 errString = "Only years after 1752 are valid."
 
-lastFridays : String -> List String
-lastFridays yearString = 
+months : List String
+months= ["January ", "February ", "March ", "April ", "May ", "June ", "July ", "August ", "September ", "October ", "November ", "December "]
+
+lastFridayStrings : String -> List String
+lastFridayStrings yearString = 
   case toInt yearString of 
     Ok year -> if (year < 1753) 
                   then [errString] 
-                  else lastFridayOfMonth year
+                  else lastFridays year
                        |> List.map toString 
                        |> List.map2 (++) months 
                        |> List.map (\s -> s ++ ", " ++ yearString)
@@ -54,7 +50,7 @@ view address yearString =
         , myStyle
         ]
         []
-     ] ++ (lastFridays yearString
+     ] ++ (lastFridayStrings yearString
            |> List.map (\date -> div [ myStyle ] [ text date ]) ))
 
 myStyle : Attribute
