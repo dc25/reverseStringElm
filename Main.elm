@@ -5,19 +5,17 @@ import Signal exposing (Address)
 import StartApp.Simple exposing (start)
 import String exposing (toInt)
 import Maybe exposing (withDefault)
+import List exposing (map, map2)
+import List.Extra exposing (scanl1)
 
 lastFridays : Int -> List Int
 lastFridays year =
   let isLeap = (year % 400) == 0 || ( (year % 4) == 0 && (year % 100) /= 0 )
       daysInMonth = [31, if isLeap then 29 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
       y = year-1
-  in daysInMonth
-     |> List.scanl (+) 0 
-     |> List.tail
-     |> Maybe.withDefault []
-     |> List.map ((+) (365*y + y//4 - y//100 + y//400))
-     |> List.map (\day -> (day-5) % 7) 
-     |> List.map2 (-) daysInMonth 
+  in scanl1 (+) daysInMonth
+     |> map (\day -> (day + 2 + y + y//4 - y//100 + y//400) % 7) 
+     |> map2 (-) daysInMonth 
 
 errString : String
 errString = "Only years after 1752 are valid."
@@ -31,9 +29,9 @@ lastFridayStrings yearString =
     Ok year -> if (year < 1753) 
                   then [errString] 
                   else lastFridays year
-                       |> List.map toString 
-                       |> List.map2 (++) months 
-                       |> List.map (\s -> s ++ ", " ++ yearString)
+                       |> map toString 
+                       |> map2 (++) months 
+                       |> map (\s -> s ++ ", " ++ yearString)
     Err _ -> [errString]
 
 main = start { model = "", view = view, update = update }
@@ -51,7 +49,7 @@ view address yearString =
         ]
         []
      ] ++ (lastFridayStrings yearString
-           |> List.map (\date -> div [ myStyle ] [ text date ]) ))
+           |> map (\date -> div [ myStyle ] [ text date ]) ))
 
 myStyle : Attribute
 myStyle =
