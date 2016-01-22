@@ -14,19 +14,20 @@ lastFridays year =
       daysInMonth = [31, if isLeap then 29 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
       y = year-1
   in scanl1 (+) daysInMonth
-     |> map (\day -> (day + 2 + y + y//4 - y//100 + y//400) % 7) 
-     |> map2 (-) daysInMonth 
+     |> map2 (\len day -> len - (day + 2 + y + y//4 - y//100 + y//400) % 7) daysInMonth
 
 lastFridayStrings : String -> List String
 lastFridayStrings yearString = 
-  let errString = "Only years after 1752 are valid."
-      months= ["January ", "February ", "March ", "April ", "May ", "June ", "July ", "August ", "September ", "October ", "November ", "December "]
+  let months= ["January ", "February ", "March ", "April ", "May ", "June ", "July ", "August ", "September ", "October ", "November ", "December "]
+      errString = "Only years after 1752 are valid."
   in case toInt yearString of 
-       Ok year -> if (year < 1753) 
-                  then [errString] 
-                  else lastFridays year
-                       |> map2 (\m d -> m ++ toString d ++ ", " ++ toString year) months
-       Err _ -> [errString]
+       Ok year -> 
+           if (year < 1753) 
+           then [errString] 
+           else lastFridays year
+                |> map2 (\m d -> m ++ toString d ++ ", " ++ toString year) months
+       Err _ -> 
+           [errString]
 
 main = start { model = "", view = view, update = update }
 
