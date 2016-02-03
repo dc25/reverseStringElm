@@ -1,26 +1,32 @@
+-- The import on the next line provides the reverse string 
+-- functionality satisfying the rosettacode.org task description.
+import String exposing (reverse) 
+
+-- The rest is fairly boilerplate code demonstrating
+-- interactively that the reverse function works.
 import Html exposing (Html, Attribute, text, div, input)
 import Html.Attributes exposing (placeholder, value, style)
 import Html.Events exposing (on, targetValue)
 import Signal exposing (Address)
 import StartApp.Simple exposing (start)
-import String exposing (reverse)
 
 main = start { model = "", view = view, update = update }
 
 update newStr oldStr = newStr
 
 view : Address String -> String -> Html
-view address forwards =
+view address forward =
   div []
     ([ input
         [ placeholder "Enter a string to reverse."
-        , value forwards
+        , value forward
         , on "input" targetValue (Signal.message address)
         , myStyle
         ]
         []
      ] ++ 
-     [ div [ myStyle] [text (reverse forwards)]
+     [ let backward = reverse forward 
+       in div [ myStyle] [text backward] 
      ])
 
 myStyle : Attribute
