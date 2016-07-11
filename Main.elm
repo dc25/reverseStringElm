@@ -7,20 +7,19 @@ import String exposing (reverse)
 import Html exposing (Html, Attribute, text, div, input)
 import Html.Attributes exposing (placeholder, value, style)
 import Html.Events exposing (on, targetValue)
-import Signal exposing (Address)
-import StartApp.Simple exposing (start)
+import Html.App exposing (beginnerProgram)
 
-main = start { model = "", view = view, update = update }
+main = beginnerProgram { model = "", view = view, update = update }
 
 update newStr oldStr = newStr
 
-view : Address String -> String -> Html
-view address forward =
+view : String -> Html String
+view forward =
   div []
     ([ input
         [ placeholder "Enter a string to reverse."
         , value forward
-        , on "input" targetValue (Signal.message address)
+        , on "input" targetValue 
         , myStyle
         ]
         []
@@ -29,7 +28,7 @@ view address forward =
        in div [ myStyle] [text backward] 
      ])
 
-myStyle : Attribute
+myStyle : Attribute msg
 myStyle =
   style
     [ ("width", "100%")
