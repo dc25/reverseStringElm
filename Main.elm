@@ -17,7 +17,7 @@ view : String -> Html String
 view forward =
   div []
     ([ input
-        [ placeholder "Enter a string to reverse."
+        [ placeholder "Enter a string to be reversed."
         , value forward
         , on "input" targetValue 
         , myStyle
