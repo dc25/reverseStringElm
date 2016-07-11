@@ -1,7 +1,7 @@
-# lastFridayOfMonthElm
+# reverseStringelm
 
-This is an Elm solution for the Rosetta Code task : "Last Friday of Each Month"
-http://rosettacode.org/wiki/Last_Friday_of_each_month
+This is an Elm solution for the Rosetta Code task : "Reverse a string"
+http://rosettacode.org/wiki/Last_Reverse_a_string
 
 Follow the link below to see it in action:
-http://dc25.github.io/lastFridayOfMonthElm/
+http://dc25.github.io/Reverse_a_string/
